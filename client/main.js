@@ -38,6 +38,10 @@ Router.route('/chat/:_id', function () {
   this.render("chat_page", {to:"main"});
 });
 
+Accounts.ui.config({
+  passwordSignupFields: "USERNAME_AND_EMAIL"
+
+});
 ///
 // helper functions
 ///
@@ -49,7 +53,7 @@ Template.available_user_list.helpers({
 Template.available_user.helpers({
   getUsername:function(userId){
     user = Meteor.users.findOne({_id:userId});
-    return user.profile.username;
+    return user.username;
   },
   isMyUser:function(userId){
     if (userId == Meteor.userId()){
@@ -72,6 +76,24 @@ Template.chat_page.helpers({
   },
 
 })
+
+Template.chat_message.helpers({
+  messages:function(){
+    var chat = Chats.findOne({_id:Session.get("chatId")});
+    return chat;
+  },
+  userId:function(){
+    return Meteor.user()._id;
+  },
+  getUsername:function(userId){
+    console.log(userId);
+    user = Meteor.users.findOne({_id:userId});
+    console.log(user.username);
+    return user.username;
+  }
+
+})
+
 Template.chat_page.events({
 // this event fires when the user sends a message on the chat page
 'submit .js-send-chat':function(event){

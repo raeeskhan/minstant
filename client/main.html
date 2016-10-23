@@ -90,6 +90,7 @@
 
 <!-- simple template that displays a message -->
 <template name="chat_message">
-	someone said: {{text}}
+    <span class="h1">{{getUsername userId}}</span>
+	: {{text}}
 	<br>
 </template>
