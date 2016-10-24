@@ -23,8 +23,8 @@
         Minstant!
       </a>
     </div>
-    <div class="nav navbar-nav">
-    {{> loginButtons}}
+    <div class="nav navbar-nav navbar-right">
+    {{> loginButtons align="right"}}
 </div>
   </div>
 </nav>
@@ -90,7 +90,13 @@
 
 <!-- simple template that displays a message -->
 <template name="chat_message">
-    <span class="h1">{{getUsername userId}}</span>
-	: {{text}}
-	<br>
+	<span class="chat-img">	
+		{{#if isMyUser user}}
+			<img src="/me.png" alt="User Avatar" class="img-me">
+		{{else}}
+			<img src="/{{getAvatar user}}" alt="User Avatar" class="img-circle">
+		{{/if}}        
+    </span>
+    : {{text}}
+	<br><br>
 </template>
