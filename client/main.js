@@ -18,6 +18,7 @@ Router.route('/chat/:_id', function () {
   // the user they want to chat to has id equal to
   // the id sent in after /chat/...
   var otherUserId = this.params._id;
+  var chatId;
   // find a chat that has two users that match current user id
   // and the requested user id
   var filter = {$or:[
@@ -26,7 +27,12 @@ Router.route('/chat/:_id', function () {
               ]};
   var chat = Chats.findOne(filter);
   if (!chat && Meteor.user()){// no chat matching the filter - need to insert a new one
-    chatId = Chats.insert({user1Id:Meteor.userId(), user2Id:otherUserId});
+    //chatId = Chats.insert({user1Id:Meteor.userId(), user2Id:otherUserId});
+    chatId = Meteor.call("insertChat", otherUserId, function(error, result){
+      if(!error) {
+          console.log("chatId returned from addChat method: "+result)
+      }
+    });    
   }
   else {// there is a chat going already - use that.
     chatId = chat._id;
@@ -100,7 +106,7 @@ Template.chat_page.events({
   // see if we can find a chat object in the database
   // to which we'll add the message
   var chat = Chats.findOne({_id:Session.get("chatId")});
-  if (chat){// ok - we have a chat to use
+  if (chat && Meteor.user()){// ok - we have a chat to use
     var msgs = chat.messages; // pull the messages property
     if (!msgs){// no messages yet, create a new array
       msgs = [];
@@ -114,10 +120,10 @@ Template.chat_page.events({
     // reset the form
     event.target.chat.value = "";
     // put the messages array onto the chat object
-    //chat.messages = msgs;
+    chat.messages = msgs;
     // update the chat object in the database.
-    Chats.update(chat._id, {$set: {chat:this.chat+msgs}});
-    console.log(Chats.findOne({_id:chat._id}).chat)
+    //Chats.update(chat._id, {$set: chat});   
+    Meteor.call("updateChat", chat); 
   }
 }
 })
