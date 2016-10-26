@@ -22,5 +22,12 @@ Meteor.methods({
     else {    
     return;
     }
+  },
+})
+
+Chats.allow({
+  remove:function() {
+    return true;
   }
+
 })

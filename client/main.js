@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 
 import './main.html';
-
+Meteor.subscribe("chats");
+Meteor.subscribe("users");
 // set up the main template the the router will use to build pages
 Router.configure({
   layoutTemplate: 'ApplicationLayout'
