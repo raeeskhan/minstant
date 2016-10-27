@@ -117,7 +117,7 @@ Template.chat_page.events({
     // is a good idea to insert data straight from the form
     // (i.e. the user) into the database?? certainly not.
     // push adds the message to the end of the array
-    msgs.push({user:Meteor.user()._id, text: event.target.chat.value});
+    msgs.push({user:Meteor.user()._id, text: emojione.toShort(event.target.chat.value)});
     // reset the form
     event.target.chat.value = "";
     // put the messages array onto the chat object
@@ -125,6 +125,11 @@ Template.chat_page.events({
     // update the chat object in the database.
     //Chats.update(chat._id, {$set: chat});   
     Meteor.call("updateChat", chat); 
+    }
+  },
+  'click .js-insert-smile':function(event){   
+       console.log(event.target.alt);
+      $('#chat').val($('#chat').val()+event.target.alt);
+
   }
-}
 })
