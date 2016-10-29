@@ -96,7 +96,7 @@ Template.chat_message.helpers({
     else {
       return false;
     }
-  }
+    },    
 })
 
 Template.chat_page.events({
@@ -117,7 +117,7 @@ Template.chat_page.events({
     // is a good idea to insert data straight from the form
     // (i.e. the user) into the database?? certainly not.
     // push adds the message to the end of the array
-    msgs.push({user:Meteor.user()._id, text: emojione.toShort(event.target.chat.value)});
+    msgs.push({user:Meteor.user()._id, text: (event.target.chat.value)});
     // reset the form
     event.target.chat.value = "";
     // put the messages array onto the chat object
@@ -133,3 +133,13 @@ Template.chat_page.events({
 
   }
 })
+ 
+Template.chat_message.rendered = function() {
+    $(".js-convert-html").each(function() {
+    var original = $(this).html();
+            // use .shortnameToImage if only converting shortnames (for slightly better performance)
+            var converted = emojione.toImage(original);
+           // $(this).html(converted);    
+    $(this).html(converted);
+ });
+  };
